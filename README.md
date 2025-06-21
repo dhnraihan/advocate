@@ -2,7 +2,7 @@
 
 A modern, elegant, and fully responsive law website built for **Advocate Saud**, a professional advocate based in Dhaka, Bangladesh. This premium website features a sophisticated design with smooth animations, interactive elements, and comprehensive legal services showcase.
 
-![Website Preview](img/15.webp)
+![Website Preview](https://img.shields.io/badge/Status-Ready%20for%20Production-brightgreen)
 ![Responsive](https://img.shields.io/badge/Responsive-Yes-blue)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
