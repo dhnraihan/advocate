@@ -102,6 +102,17 @@ advocate-saud-website/
 └── docs/                  # Documentation
 ```
 
+---
+## Screenshots 📸
+
+### Home Page
+![Home Page](assets/img/15.webp)
+
+<!-- ### Bloging Page
+![Bloging Page](travel_project/static/img/screenshot2.webp) -->
+
+---
+
 ## 🎨 Customization Guide
 
 ### 1. Personal Information
