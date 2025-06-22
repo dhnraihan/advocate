@@ -42,6 +42,22 @@ A modern, elegant, and fully responsive law website built for **Advocate Saud**,
 - **Social Media Links**: Facebook, LinkedIn, Twitter, YouTube
 - **Legal Disclaimers**: Professional footer with legal notices
 
+### 🌙 Dark/Light Mode
+- **Complete Dark Theme** with proper contrast and readability
+- **Smooth Transitions** between modes
+- **Mode Preference Saving** in localStorage
+- **Custom Toggle Switch** with sun/moon icons
+- **Both Desktop & Mobile** dark mode toggles
+- **Optimized Colors** for both modes
+
+
+**User Experience:**
+   - ✅ Preferences saved in browser
+   - ✅ Responsive toggles for mobile
+   - ✅ Visual feedback for active states
+   - ✅ Seamless switching experience
+
+
 ## 🛠️ Technologies Used
 
 - **HTML5**: Semantic markup
