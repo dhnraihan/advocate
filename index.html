@@ -12,7 +12,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Bengali:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -22,6 +22,7 @@
     
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -32,7 +33,8 @@
                     },
                     fontFamily: {
                         'serif': ['Playfair Display', 'serif'],
-                        'sans': ['Inter', 'sans-serif']
+                        'sans': ['Inter', 'sans-serif'],
+                        'bengali': ['Noto Sans Bengali', 'sans-serif']
                     }
                 }
             }
@@ -53,6 +55,11 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
+        .dark .glass-effect {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
         .gradient-text {
             background: linear-gradient(135deg, #fbbf24, #f59e0b);
             -webkit-background-clip: text;
@@ -69,12 +76,76 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
         
+        .dark .hover-lift:hover {
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        
         .testimonial-card {
             min-height: 300px;
         }
+        
+        /* Dark mode transitions */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        /* Language specific fonts */
+        .lang-en {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .lang-bn {
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+        
+        /* Toggle switch styles */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #fbbf24;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
     </style>
 </head>
-<body class="font-sans text-gray-800 overflow-x-hidden">
+<body class="font-sans text-gray-800 dark:text-gray-200 dark:bg-gray-900 overflow-x-hidden transition-colors duration-300">
     
     <!-- Navigation -->
     <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
@@ -82,28 +153,49 @@
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center">
                     <div class="text-2xl font-serif font-bold text-white">
-                        <span class="text-gold">Advocate</span> Saud
+                        <span class="text-gold" data-translate="advocate">Advocate</span> 
+                        <span data-translate="name">Saud</span>
                     </div>
                 </div>
                 
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="nav-link text-white hover:text-gold transition-colors">Home</a>
-                    <a href="#about" class="nav-link text-white hover:text-gold transition-colors">About</a>
-                    <a href="#practice-areas" class="nav-link text-white hover:text-gold transition-colors">Practice Areas</a>
-                    <a href="#testimonials" class="nav-link text-white hover:text-gold transition-colors">Testimonials</a>
-                    <a href="#blog" class="nav-link text-white hover:text-gold transition-colors">Blog</a>
-                    <a href="#contact" class="nav-link text-white hover:text-gold transition-colors">Contact</a>
+                    <a href="#home" class="nav-link text-white hover:text-gold transition-colors" data-translate="nav-home">Home</a>
+                    <a href="#about" class="nav-link text-white hover:text-gold transition-colors" data-translate="nav-about">About</a>
+                    <a href="#practice-areas" class="nav-link text-white hover:text-gold transition-colors" data-translate="nav-practice">Practice Areas</a>
+                    <a href="#testimonials" class="nav-link text-white hover:text-gold transition-colors" data-translate="nav-testimonials">Testimonials</a>
+                    <a href="#blog" class="nav-link text-white hover:text-gold transition-colors" data-translate="nav-blog">Blog</a>
+                    <a href="#contact" class="nav-link text-white hover:text-gold transition-colors" data-translate="nav-contact">Contact</a>
+                    
+                    <!-- Dark Mode Toggle -->
+                    <div class="flex items-center">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="dark-mode-toggle">
+                            <span class="slider">
+                                <i class="fas fa-sun absolute left-1 left-[11px] top-1/2 transform -translate-y-1/2 text-yellow-500 text-xs"></i>
+                                <i class="fas fa-moon absolute right-1 right-[11px] top-1/2 transform -translate-y-1/2 text-gray-700 text-xs"></i>
+                            </span>
+                        </label>
+                    </div>
                     
                     <!-- Language Toggle -->
                     <div class="flex items-center bg-white bg-opacity-20 rounded-full p-1">
-                        <button class="px-3 py-1 rounded-full text-sm transition-all" id="lang-en">EN</button>
-                        <button class="px-3 py-1 rounded-full text-sm transition-all" id="lang-bn">বাং</button>
+                        <button class="px-3 py-1 rounded-full text-sm transition-all bg-gold text-navy" id="lang-en">EN</button>
+                        <button class="px-3 py-1 rounded-full text-sm transition-all text-white" id="lang-bn">বাং</button>
                     </div>
                 </div>
                 
                 <!-- Mobile Menu Button -->
-                <div class="md:hidden">
+                <div class="md:hidden flex items-center space-x-4">
+                    <!-- Mobile Dark Mode Toggle -->
+                    <label class="toggle-switch scale-75">
+                        <input type="checkbox" id="mobile-dark-mode-toggle">
+                        <span class="slider">
+                            <i class="fas fa-sun absolute left-1 top-1/2 transform -translate-y-1/2 text-yellow-500 text-xs"></i>
+                            <i class="fas fa-moon absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-700 text-xs"></i>
+                        </span>
+                    </label>
+                    
                     <button class="text-white" id="mobile-menu-button">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
@@ -112,32 +204,40 @@
         </div>
         
         <!-- Mobile Menu -->
-        <div class="md:hidden hidden bg-navy-dark bg-opacity-95" id="mobile-menu">
+        <div class="md:hidden hidden bg-navy-dark dark:bg-gray-800 bg-opacity-95" id="mobile-menu">
             <div class="px-4 py-2 space-y-4">
-                <a href="#home" class="block text-white hover:text-gold transition-colors py-2">Home</a>
-                <a href="#about" class="block text-white hover:text-gold transition-colors py-2">About</a>
-                <a href="#practice-areas" class="block text-white hover:text-gold transition-colors py-2">Practice Areas</a>
-                <a href="#testimonials" class="block text-white hover:text-gold transition-colors py-2">Testimonials</a>
-                <a href="#blog" class="block text-white hover:text-gold transition-colors py-2">Blog</a>
-                <a href="#contact" class="block text-white hover:text-gold transition-colors py-2">Contact</a>
+                <a href="#home" class="block text-white hover:text-gold transition-colors py-2" data-translate="nav-home">Home</a>
+                <a href="#about" class="block text-white hover:text-gold transition-colors py-2" data-translate="nav-about">About</a>
+                <a href="#practice-areas" class="block text-white hover:text-gold transition-colors py-2" data-translate="nav-practice">Practice Areas</a>
+                <a href="#testimonials" class="block text-white hover:text-gold transition-colors py-2" data-translate="nav-testimonials">Testimonials</a>
+                <a href="#blog" class="block text-white hover:text-gold transition-colors py-2" data-translate="nav-blog">Blog</a>
+                <a href="#contact" class="block text-white hover:text-gold transition-colors py-2" data-translate="nav-contact">Contact</a>
+                
+                <!-- Mobile Language Toggle -->
+                <div class="flex justify-center pt-4">
+                    <div class="flex items-center bg-white bg-opacity-20 rounded-full p-1">
+                        <button class="px-3 py-1 rounded-full text-sm transition-all bg-gold text-navy" id="mobile-lang-en">EN</button>
+                        <button class="px-3 py-1 rounded-full text-sm transition-all text-white" id="mobile-lang-bn">বাং</button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
     
     <!-- Hero Section -->
-    <section id="home" class="relative h-screen flex items-center justify-center parallax" style="background-image: linear-gradient(rgba(30, 58, 138, 0.8), rgba(30, 64, 175, 0.8)), url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');">
+    <section id="home" class="relative h-screen flex items-center justify-center parallax dark:opacity-90" style="background-image: linear-gradient(rgba(30, 58, 138, 0.8), rgba(30, 64, 175, 0.8)), url('https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');">
         <div class="text-center text-white max-w-4xl mx-auto px-4">
-            <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight" data-aos="fade-up">
+            <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight" data-aos="fade-up" data-translate="hero-title">
                 Justice Delayed is <span class="gradient-text">Justice Denied</span>
             </h1>
-            <p class="text-xl md:text-2xl mb-8 opacity-90" data-aos="fade-up" data-aos-delay="200">
+            <p class="text-xl md:text-2xl mb-8 opacity-90" data-aos="fade-up" data-aos-delay="200" data-translate="hero-subtitle">
                 Premier Legal Services in Dhaka, Bangladesh
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="400">
-                <button class="bg-gold hover:bg-gold-light text-navy px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105">
+                <button class="bg-gold hover:bg-gold-light text-navy px-8 py-4 rounded-lg font-semibold text-lg transition-all transform hover:scale-105" data-translate="hero-cta1">
                     Get Free Consultation
                 </button>
-                <button class="border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 rounded-lg font-semibold text-lg transition-all">
+                <button class="border-2 border-white text-white hover:bg-white hover:text-navy px-8 py-4 rounded-lg font-semibold text-lg transition-all" data-translate="hero-cta2">
                     View Practice Areas
                 </button>
             </div>
@@ -150,11 +250,11 @@
     </section>
     
     <!-- About Section -->
-    <section id="about" class="py-20 bg-gray-50">
+    <section id="about" class="py-20 bg-gray-50 dark:bg-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy mb-4">About Advocate Saud</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy dark:text-gold mb-4" data-translate="about-title">About Advocate Saud</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto" data-translate="about-subtitle">
                     With over a decade of experience in Bangladesh's legal system, I am committed to providing exceptional legal representation and achieving justice for my clients.
                 </p>
             </div>
@@ -166,22 +266,22 @@
                          class="w-full h-96 object-cover rounded-lg shadow-2xl grayscale hover:grayscale-0 transition-all duration-500">
                 </div>
                 <div data-aos="fade-left">
-                    <h3 class="text-3xl font-serif font-bold text-navy mb-6">Experienced Legal Advocate</h3>
-                    <p class="text-gray-600 mb-6 leading-relaxed">
+                    <h3 class="text-3xl font-serif font-bold text-navy dark:text-gold mb-6" data-translate="about-heading">Experienced Legal Advocate</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed" data-translate="about-p1">
                         I am a seasoned advocate practicing in the Supreme Court of Bangladesh and various subordinate courts in Dhaka. My practice focuses on delivering comprehensive legal solutions with integrity, professionalism, and unwavering dedication to justice.
                     </p>
-                    <p class="text-gray-600 mb-6 leading-relaxed">
+                    <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed" data-translate="about-p2">
                         Having handled over 500+ cases successfully, I bring extensive experience in Criminal Law, Family Law, and Corporate Law. My approach combines deep legal knowledge with strategic thinking to achieve the best possible outcomes for my clients.
                     </p>
                     <div class="flex flex-wrap gap-4">
-                        <div class="bg-navy text-white px-4 py-2 rounded-full">
-                            <span class="font-semibold">500+</span> Cases Won
+                        <div class="bg-navy dark:bg-gold text-white dark:text-navy px-4 py-2 rounded-full">
+                            <span class="font-semibold">500+</span> <span data-translate="stat-cases">Cases Won</span>
                         </div>
-                        <div class="bg-gold text-navy px-4 py-2 rounded-full">
-                            <span class="font-semibold">12+</span> Years Experience
+                        <div class="bg-gold dark:bg-navy text-navy dark:text-white px-4 py-2 rounded-full">
+                            <span class="font-semibold">12+</span> <span data-translate="stat-experience">Years Experience</span>
                         </div>
-                        <div class="bg-navy text-white px-4 py-2 rounded-full">
-                            <span class="font-semibold">98%</span> Success Rate
+                        <div class="bg-navy dark:bg-gold text-white dark:text-navy px-4 py-2 rounded-full">
+                            <span class="font-semibold">98%</span> <span data-translate="stat-success">Success Rate</span>
                         </div>
                     </div>
                 </div>
@@ -189,7 +289,7 @@
             
             <!-- Education & Experience Timeline -->
             <div class="mt-16" data-aos="fade-up">
-                <h3 class="text-3xl font-serif font-bold text-navy text-center mb-12">Education & Experience</h3>
+                <h3 class="text-3xl font-serif font-bold text-navy dark:text-gold text-center mb-12" data-translate="timeline-title">Education & Experience</h3>
                 <div class="relative">
                     <!-- Timeline Line -->
                     <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gold"></div>
@@ -199,14 +299,14 @@
                         <!-- Item 1 -->
                         <div class="flex items-center justify-between">
                             <div class="w-5/12 text-right" data-aos="fade-right">
-                                <div class="bg-white p-6 rounded-lg shadow-lg hover-lift">
-                                    <h4 class="font-serif font-bold text-navy text-xl mb-2">LL.B (Hons)</h4>
-                                    <p class="text-gray-600 mb-2">University of Dhaka</p>
+                                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover-lift">
+                                    <h4 class="font-serif font-bold text-navy dark:text-gold text-xl mb-2" data-translate="timeline-1-title">LL.B (Hons)</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 mb-2" data-translate="timeline-1-place">University of Dhaka</p>
                                     <span class="text-gold font-semibold">2008 - 2012</span>
                                 </div>
                             </div>
                             <div class="w-2/12 flex justify-center">
-                                <div class="w-4 h-4 bg-gold rounded-full border-4 border-white shadow-lg"></div>
+                                <div class="w-4 h-4 bg-gold rounded-full border-4 border-white dark:border-gray-700 shadow-lg"></div>
                             </div>
                             <div class="w-5/12"></div>
                         </div>
@@ -215,12 +315,12 @@
                         <div class="flex items-center justify-between">
                             <div class="w-5/12"></div>
                             <div class="w-2/12 flex justify-center">
-                                <div class="w-4 h-4 bg-gold rounded-full border-4 border-white shadow-lg"></div>
+                                <div class="w-4 h-4 bg-gold rounded-full border-4 border-white dark:border-gray-700 shadow-lg"></div>
                             </div>
                             <div class="w-5/12" data-aos="fade-left">
-                                <div class="bg-white p-6 rounded-lg shadow-lg hover-lift">
-                                    <h4 class="font-serif font-bold text-navy text-xl mb-2">Bar Council Enrollment</h4>
-                                    <p class="text-gray-600 mb-2">Bangladesh Bar Council</p>
+                                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover-lift">
+                                    <h4 class="font-serif font-bold text-navy dark:text-gold text-xl mb-2" data-translate="timeline-2-title">Bar Council Enrollment</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 mb-2" data-translate="timeline-2-place">Bangladesh Bar Council</p>
                                     <span class="text-gold font-semibold">2013</span>
                                 </div>
                             </div>
@@ -229,14 +329,14 @@
                         <!-- Item 3 -->
                         <div class="flex items-center justify-between">
                             <div class="w-5/12 text-right" data-aos="fade-right">
-                                <div class="bg-white p-6 rounded-lg shadow-lg hover-lift">
-                                    <h4 class="font-serif font-bold text-navy text-xl mb-2">Senior Associate</h4>
-                                    <p class="text-gray-600 mb-2">Rahman & Associates</p>
+                                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover-lift">
+                                    <h4 class="font-serif font-bold text-navy dark:text-gold text-xl mb-2" data-translate="timeline-3-title">Senior Associate</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 mb-2" data-translate="timeline-3-place">Rahman & Associates</p>
                                     <span class="text-gold font-semibold">2013 - 2018</span>
                                 </div>
                             </div>
                             <div class="w-2/12 flex justify-center">
-                                <div class="w-4 h-4 bg-gold rounded-full border-4 border-white shadow-lg"></div>
+                                <div class="w-4 h-4 bg-gold rounded-full border-4 border-white dark:border-gray-700 shadow-lg"></div>
                             </div>
                             <div class="w-5/12"></div>
                         </div>
@@ -245,13 +345,13 @@
                         <div class="flex items-center justify-between">
                             <div class="w-5/12"></div>
                             <div class="w-2/12 flex justify-center">
-                                <div class="w-4 h-4 bg-gold rounded-full border-4 border-white shadow-lg"></div>
+                                <div class="w-4 h-4 bg-gold rounded-full border-4 border-white dark:border-gray-700 shadow-lg"></div>
                             </div>
                             <div class="w-5/12" data-aos="fade-left">
-                                <div class="bg-white p-6 rounded-lg shadow-lg hover-lift">
-                                    <h4 class="font-serif font-bold text-navy text-xl mb-2">Independent Practice</h4>
-                                    <p class="text-gray-600 mb-2">Advocate Saud Chambers</p>
-                                    <span class="text-gold font-semibold">2018 - Present</span>
+                                <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover-lift">
+                                    <h4 class="font-serif font-bold text-navy dark:text-gold text-xl mb-2" data-translate="timeline-4-title">Independent Practice</h4>
+                                    <p class="text-gray-600 dark:text-gray-300 mb-2" data-translate="timeline-4-place">Advocate Saud Chambers</p>
+                                    <span class="text-gold font-semibold">2018 - <span data-translate="present">Present</span></span>
                                 </div>
                             </div>
                         </div>
@@ -262,77 +362,77 @@
     </section>
     
     <!-- Practice Areas Section -->
-    <section id="practice-areas" class="py-20 bg-white">
+    <section id="practice-areas" class="py-20 bg-white dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy mb-4">Practice Areas</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy dark:text-gold mb-4" data-translate="practice-title">Practice Areas</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto" data-translate="practice-subtitle">
                     Comprehensive legal services across multiple practice areas with proven expertise and successful track record.
                 </p>
             </div>
             
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- Criminal Law -->
-                <div class="bg-white rounded-xl shadow-lg hover-lift group cursor-pointer" data-aos="fade-up" data-aos-delay="100">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover-lift group cursor-pointer" data-aos="fade-up" data-aos-delay="100">
                     <div class="p-8 text-center">
-                        <div class="w-20 h-20 bg-navy rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-gold transition-colors">
-                            <i class="fas fa-gavel text-white text-2xl"></i>
+                        <div class="w-20 h-20 bg-navy dark:bg-gold rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-gold dark:group-hover:bg-navy transition-colors">
+                            <i class="fas fa-gavel text-white dark:text-navy group-hover:text-navy dark:group-hover:text-white text-2xl"></i>
                         </div>
-                        <h3 class="text-2xl font-serif font-bold text-navy mb-4">Criminal Law</h3>
-                        <p class="text-gray-600 mb-6 leading-relaxed">
+                        <h3 class="text-2xl font-serif font-bold text-navy dark:text-gold mb-4" data-translate="criminal-title">Criminal Law</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed" data-translate="criminal-desc">
                             Expert defense representation in all criminal matters including murder, theft, fraud, and white-collar crimes with a proven track record of successful acquittals.
                         </p>
-                        <ul class="text-left text-gray-600 space-y-2 mb-6">
-                            <li><i class="fas fa-check text-gold mr-2"></i> Murder & Homicide Cases</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i> Fraud & Financial Crimes</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i> Drug Offenses</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i> Bail Applications</li>
+                        <ul class="text-left text-gray-600 dark:text-gray-300 space-y-2 mb-6">
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="criminal-1">Murder & Homicide Cases</span></li>
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="criminal-2">Fraud & Financial Crimes</span></li>
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="criminal-3">Drug Offenses</span></li>
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="criminal-4">Bail Applications</span></li>
                         </ul>
-                        <button class="w-full bg-navy hover:bg-gold text-white py-3 rounded-lg transition-colors font-semibold">
+                        <button class="w-full bg-navy dark:bg-gold hover:bg-gold dark:hover:bg-navy text-white dark:text-navy py-3 rounded-lg transition-colors font-semibold" data-translate="learn-more">
                             Learn More
                         </button>
                     </div>
                 </div>
                 
                 <!-- Family Law -->
-                <div class="bg-white rounded-xl shadow-lg hover-lift group cursor-pointer" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover-lift group cursor-pointer" data-aos="fade-up" data-aos-delay="200">
                     <div class="p-8 text-center">
-                        <div class="w-20 h-20 bg-navy rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-gold transition-colors">
-                            <i class="fas fa-users text-white text-2xl"></i>
+                        <div class="w-20 h-20 bg-navy dark:bg-gold rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-gold dark:group-hover:bg-navy transition-colors">
+                            <i class="fas fa-users text-white dark:text-navy group-hover:text-navy dark:group-hover:text-white text-2xl"></i>
                         </div>
-                        <h3 class="text-2xl font-serif font-bold text-navy mb-4">Family Law</h3>
-                        <p class="text-gray-600 mb-6 leading-relaxed">
+                        <h3 class="text-2xl font-serif font-bold text-navy dark:text-gold mb-4" data-translate="family-title">Family Law</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed" data-translate="family-desc">
                             Compassionate and skilled representation in family matters including divorce, child custody, maintenance, and inheritance disputes with focus on amicable resolutions.
                         </p>
-                        <ul class="text-left text-gray-600 space-y-2 mb-6">
-                            <li><i class="fas fa-check text-gold mr-2"></i> Divorce Proceedings</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i> Child Custody</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i> Maintenance Claims</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i> Inheritance Disputes</li>
+                        <ul class="text-left text-gray-600 dark:text-gray-300 space-y-2 mb-6">
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="family-1">Divorce Proceedings</span></li>
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="family-2">Child Custody</span></li>
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="family-3">Maintenance Claims</span></li>
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="family-4">Inheritance Disputes</span></li>
                         </ul>
-                        <button class="w-full bg-navy hover:bg-gold text-white py-3 rounded-lg transition-colors font-semibold">
+                        <button class="w-full bg-navy dark:bg-gold hover:bg-gold dark:hover:bg-navy text-white dark:text-navy py-3 rounded-lg transition-colors font-semibold" data-translate="learn-more">
                             Learn More
                         </button>
                     </div>
                 </div>
                 
                 <!-- Corporate Law -->
-                <div class="bg-white rounded-xl shadow-lg hover-lift group cursor-pointer" data-aos="fade-up" data-aos-delay="300">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover-lift group cursor-pointer" data-aos="fade-up" data-aos-delay="300">
                     <div class="p-8 text-center">
-                        <div class="w-20 h-20 bg-navy rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-gold transition-colors">
-                            <i class="fas fa-building text-white text-2xl"></i>
+                        <div class="w-20 h-20 bg-navy dark:bg-gold rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-gold dark:group-hover:bg-navy transition-colors">
+                            <i class="fas fa-building text-white dark:text-navy group-hover:text-navy dark:group-hover:text-white text-2xl"></i>
                         </div>
-                        <h3 class="text-2xl font-serif font-bold text-navy mb-4">Corporate Law</h3>
-                        <p class="text-gray-600 mb-6 leading-relaxed">
+                        <h3 class="text-2xl font-serif font-bold text-navy dark:text-gold mb-4" data-translate="corporate-title">Corporate Law</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed" data-translate="corporate-desc">
                             Comprehensive corporate legal services including company formation, contracts, compliance, mergers, and business dispute resolution for growing enterprises.
                         </p>
-                        <ul class="text-left text-gray-600 space-y-2 mb-6">
-                            <li><i class="fas fa-check text-gold mr-2"></i> Company Formation</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i> Contract Drafting</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i> Compliance Advisory</li>
-                            <li><i class="fas fa-check text-gold mr-2"></i> Business Disputes</li>
+                        <ul class="text-left text-gray-600 dark:text-gray-300 space-y-2 mb-6">
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="corporate-1">Company Formation</span></li>
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="corporate-2">Contract Drafting</span></li>
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="corporate-3">Compliance Advisory</span></li>
+                            <li><i class="fas fa-check text-gold mr-2"></i> <span data-translate="corporate-4">Business Disputes</span></li>
                         </ul>
-                        <button class="w-full bg-navy hover:bg-gold text-white py-3 rounded-lg transition-colors font-semibold">
+                        <button class="w-full bg-navy dark:bg-gold hover:bg-gold dark:hover:bg-navy text-white dark:text-navy py-3 rounded-lg transition-colors font-semibold" data-translate="learn-more">
                             Learn More
                         </button>
                     </div>
@@ -342,11 +442,11 @@
     </section>
     
     <!-- Testimonials Section -->
-    <section id="testimonials" class="py-20 bg-navy">
+    <section id="testimonials" class="py-20 bg-navy dark:bg-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Client Testimonials</h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white dark:text-gold mb-4" data-translate="testimonials-title">Client Testimonials</h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto" data-translate="testimonials-subtitle">
                     What my clients say about their experience working with me.
                 </p>
             </div>
@@ -358,7 +458,7 @@
                         
                         <!-- Testimonial 1 -->
                         <div class="testimonial-card flex-none w-full md:w-1/2 lg:w-1/3 px-4">
-                            <div class="bg-white rounded-xl p-8 shadow-2xl h-full">
+                            <div class="bg-white dark:bg-gray-700 rounded-xl p-8 shadow-2xl h-full">
                                 <div class="flex items-center mb-4">
                                     <div class="flex text-gold text-xl">
                                         <i class="fas fa-star"></i>
@@ -368,16 +468,16 @@
                                         <i class="fas fa-star"></i>
                                     </div>
                                 </div>
-                                <p class="text-gray-600 italic mb-6 leading-relaxed">
+                                <p class="text-gray-600 dark:text-gray-300 italic mb-6 leading-relaxed" data-translate="testimonial-1">
                                     "Advocate Saud handled my criminal case with exceptional skill and dedication. His expertise and professional approach gave me confidence throughout the entire process. I'm grateful for the positive outcome."
                                 </p>
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                    <div class="w-12 h-12 bg-navy dark:bg-gold rounded-full flex items-center justify-center text-white dark:text-navy font-bold mr-4">
                                         MR
                                     </div>
                                     <div>
-                                        <h4 class="font-semibold text-navy">Mohammad Rahman</h4>
-                                        <p class="text-gray-500 text-sm">Business Owner</p>
+                                        <h4 class="font-semibold text-navy dark:text-gold" data-translate="client-1-name">Mohammad Rahman</h4>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm" data-translate="client-1-title">Business Owner</p>
                                     </div>
                                 </div>
                             </div>
@@ -385,7 +485,7 @@
                         
                         <!-- Testimonial 2 -->
                         <div class="testimonial-card flex-none w-full md:w-1/2 lg:w-1/3 px-4">
-                            <div class="bg-white rounded-xl p-8 shadow-2xl h-full">
+                            <div class="bg-white dark:bg-gray-700 rounded-xl p-8 shadow-2xl h-full">
                                 <div class="flex items-center mb-4">
                                     <div class="flex text-gold text-xl">
                                         <i class="fas fa-star"></i>
@@ -395,16 +495,16 @@
                                         <i class="fas fa-star"></i>
                                     </div>
                                 </div>
-                                <p class="text-gray-600 italic mb-6 leading-relaxed">
+                                <p class="text-gray-600 dark:text-gray-300 italic mb-6 leading-relaxed" data-translate="testimonial-2">
                                     "During my difficult divorce case, Advocate Saud provided not just legal expertise but also emotional support. His compassionate approach and strategic thinking helped me achieve a fair settlement."
                                 </p>
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                    <div class="w-12 h-12 bg-navy dark:bg-gold rounded-full flex items-center justify-center text-white dark:text-navy font-bold mr-4">
                                         FA
                                     </div>
                                     <div>
-                                        <h4 class="font-semibold text-navy">Fatima Ahmed</h4>
-                                        <p class="text-gray-500 text-sm">Teacher</p>
+                                        <h4 class="font-semibold text-navy dark:text-gold" data-translate="client-2-name">Fatima Ahmed</h4>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm" data-translate="client-2-title">Teacher</p>
                                     </div>
                                 </div>
                             </div>
@@ -412,7 +512,7 @@
                         
                         <!-- Testimonial 3 -->
                         <div class="testimonial-card flex-none w-full md:w-1/2 lg:w-1/3 px-4">
-                            <div class="bg-white rounded-xl p-8 shadow-2xl h-full">
+                            <div class="bg-white dark:bg-gray-700 rounded-xl p-8 shadow-2xl h-full">
                                 <div class="flex items-center mb-4">
                                     <div class="flex text-gold text-xl">
                                         <i class="fas fa-star"></i>
@@ -422,16 +522,16 @@
                                         <i class="fas fa-star"></i>
                                     </div>
                                 </div>
-                                <p class="text-gray-600 italic mb-6 leading-relaxed">
+                                <p class="text-gray-600 dark:text-gray-300 italic mb-6 leading-relaxed" data-translate="testimonial-3">
                                     "Excellent corporate legal services for our company formation and ongoing compliance. Advocate Saud's attention to detail and business acumen have been invaluable to our growth."
                                 </p>
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                    <div class="w-12 h-12 bg-navy dark:bg-gold rounded-full flex items-center justify-center text-white dark:text-navy font-bold mr-4">
                                         SK
                                     </div>
                                     <div>
-                                        <h4 class="font-semibold text-navy">Shahid Khan</h4>
-                                        <p class="text-gray-500 text-sm">CEO, Tech Startup</p>
+                                        <h4 class="font-semibold text-navy dark:text-gold" data-translate="client-3-name">Shahid Khan</h4>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm" data-translate="client-3-title">CEO, Tech Startup</p>
                                     </div>
                                 </div>
                             </div>
@@ -439,7 +539,7 @@
                         
                         <!-- Additional testimonials for seamless carousel -->
                         <div class="testimonial-card flex-none w-full md:w-1/2 lg:w-1/3 px-4">
-                            <div class="bg-white rounded-xl p-8 shadow-2xl h-full">
+                            <div class="bg-white dark:bg-gray-700 rounded-xl p-8 shadow-2xl h-full">
                                 <div class="flex items-center mb-4">
                                     <div class="flex text-gold text-xl">
                                         <i class="fas fa-star"></i>
@@ -449,16 +549,16 @@
                                         <i class="fas fa-star"></i>
                                     </div>
                                 </div>
-                                <p class="text-gray-600 italic mb-6 leading-relaxed">
+                                <p class="text-gray-600 dark:text-gray-300 italic mb-6 leading-relaxed" data-translate="testimonial-4">
                                     "Professional, knowledgeable, and reliable. Advocate Saud successfully resolved our property dispute with impressive legal strategy and negotiation skills. Highly recommended!"
                                 </p>
                                 <div class="flex items-center">
-                                    <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center text-white font-bold mr-4">
+                                    <div class="w-12 h-12 bg-navy dark:bg-gold rounded-full flex items-center justify-center text-white dark:text-navy font-bold mr-4">
                                         NH
                                     </div>
                                     <div>
-                                        <h4 class="font-semibold text-navy">Nasir Hossain</h4>
-                                        <p class="text-gray-500 text-sm">Real Estate Developer</p>
+                                        <h4 class="font-semibold text-navy dark:text-gold" data-translate="client-4-name">Nasir Hossain</h4>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm" data-translate="client-4-title">Real Estate Developer</p>
                                     </div>
                                 </div>
                             </div>
@@ -479,11 +579,11 @@
     </section>
     
     <!-- Blog Section -->
-    <section id="blog" class="py-20 bg-gray-50">
+    <section id="blog" class="py-20 bg-gray-50 dark:bg-gray-900">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy mb-4">Legal Insights & Blog</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy dark:text-gold mb-4" data-translate="blog-title">Legal Insights & Blog</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto" data-translate="blog-subtitle">
                     Stay informed with latest legal developments, insights, and practical advice from experienced legal practice.
                 </p>
             </div>
@@ -493,79 +593,80 @@
                 <div class="relative flex-1 max-w-md">
                     <input type="text" 
                            placeholder="Search articles..." 
-                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent">
+                           data-translate-placeholder="search-placeholder"
+                           class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent">
                     <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                 </div>
                 <div class="flex gap-2 flex-wrap">
-                    <span class="bg-navy text-white px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-gold transition-colors">All</span>
-                    <span class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-navy hover:text-white transition-colors">Criminal Law</span>
-                    <span class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-navy hover:text-white transition-colors">Family Law</span>
-                    <span class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-navy hover:text-white transition-colors">Corporate Law</span>
+                    <span class="bg-navy dark:bg-gold text-white dark:text-navy px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-gold dark:hover:bg-navy transition-colors" data-translate="filter-all">All</span>
+                    <span class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-navy hover:text-white dark:hover:bg-gold dark:hover:text-navy transition-colors" data-translate="filter-criminal">Criminal Law</span>
+                    <span class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-navy hover:text-white dark:hover:bg-gold dark:hover:text-navy transition-colors" data-translate="filter-family">Family Law</span>
+                    <span class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-full text-sm cursor-pointer hover:bg-navy hover:text-white dark:hover:bg-gold dark:hover:text-navy transition-colors" data-translate="filter-corporate">Corporate Law</span>
                 </div>
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Blog Post 1 -->
-                <article class="bg-white rounded-xl shadow-lg overflow-hidden hover-lift" data-aos="fade-up" data-aos-delay="100">
+                <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover-lift" data-aos="fade-up" data-aos-delay="100">
                     <img src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                          alt="Criminal Law Article" 
                          class="w-full h-48 object-cover">
                     <div class="p-6">
                         <div class="flex items-center gap-2 mb-3">
-                            <span class="bg-navy text-white px-3 py-1 rounded-full text-xs">Criminal Law</span>
-                            <span class="text-gray-500 text-sm">Dec 15, 2024</span>
+                            <span class="bg-navy dark:bg-gold text-white dark:text-navy px-3 py-1 rounded-full text-xs" data-translate="filter-criminal">Criminal Law</span>
+                            <span class="text-gray-500 dark:text-gray-400 text-sm">Dec 15, 2024</span>
                         </div>
-                        <h3 class="text-xl font-serif font-bold text-navy mb-3 hover:text-gold transition-colors cursor-pointer">
+                        <h3 class="text-xl font-serif font-bold text-navy dark:text-gold mb-3 hover:text-gold dark:hover:text-navy transition-colors cursor-pointer" data-translate="blog-1-title">
                             Understanding Bail Procedures in Bangladesh
                         </h3>
-                        <p class="text-gray-600 mb-4 leading-relaxed">
+                        <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed" data-translate="blog-1-desc">
                             A comprehensive guide to bail procedures, requirements, and your rights when facing criminal charges in Bangladesh courts.
                         </p>
-                        <a href="#" class="text-gold hover:text-navy font-semibold transition-colors">
+                        <a href="#" class="text-gold hover:text-navy dark:hover:text-gold font-semibold transition-colors" data-translate="read-more">
                             Read More <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
                 </article>
                 
                 <!-- Blog Post 2 -->
-                <article class="bg-white rounded-xl shadow-lg overflow-hidden hover-lift" data-aos="fade-up" data-aos-delay="200">
+                <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover-lift" data-aos="fade-up" data-aos-delay="200">
                     <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                          alt="Family Law Article" 
                          class="w-full h-48 object-cover">
                     <div class="p-6">
                         <div class="flex items-center gap-2 mb-3">
-                            <span class="bg-navy text-white px-3 py-1 rounded-full text-xs">Family Law</span>
-                            <span class="text-gray-500 text-sm">Dec 10, 2024</span>
+                            <span class="bg-navy dark:bg-gold text-white dark:text-navy px-3 py-1 rounded-full text-xs" data-translate="filter-family">Family Law</span>
+                            <span class="text-gray-500 dark:text-gray-400 text-sm">Dec 10, 2024</span>
                         </div>
-                        <h3 class="text-xl font-serif font-bold text-navy mb-3 hover:text-gold transition-colors cursor-pointer">
+                        <h3 class="text-xl font-serif font-bold text-navy dark:text-gold mb-3 hover:text-gold dark:hover:text-navy transition-colors cursor-pointer" data-translate="blog-2-title">
                             Child Custody Rights in Bangladesh | সন্তানের অভিভাবকত্বের অধিকার
                         </h3>
-                        <p class="text-gray-600 mb-4 leading-relaxed">
+                        <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed" data-translate="blog-2-desc">
                             Essential information about child custody laws, parental rights, and court procedures in Bangladesh family law.
                         </p>
-                        <a href="#" class="text-gold hover:text-navy font-semibold transition-colors">
+                        <a href="#" class="text-gold hover:text-navy dark:hover:text-gold font-semibold transition-colors" data-translate="read-more">
                             Read More <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
                 </article>
                 
                 <!-- Blog Post 3 -->
-                <article class="bg-white rounded-xl shadow-lg overflow-hidden hover-lift" data-aos="fade-up" data-aos-delay="300">
+                <article class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover-lift" data-aos="fade-up" data-aos-delay="300">
                     <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
                          alt="Corporate Law Article" 
                          class="w-full h-48 object-cover">
                     <div class="p-6">
                         <div class="flex items-center gap-2 mb-3">
-                            <span class="bg-navy text-white px-3 py-1 rounded-full text-xs">Corporate Law</span>
-                            <span class="text-gray-500 text-sm">Dec 5, 2024</span>
+                            <span class="bg-navy dark:bg-gold text-white dark:text-navy px-3 py-1 rounded-full text-xs" data-translate="filter-corporate">Corporate Law</span>
+                            <span class="text-gray-500 dark:text-gray-400 text-sm">Dec 5, 2024</span>
                         </div>
-                        <h3 class="text-xl font-serif font-bold text-navy mb-3 hover:text-gold transition-colors cursor-pointer">
+                        <h3 class="text-xl font-serif font-bold text-navy dark:text-gold mb-3 hover:text-gold dark:hover:text-navy transition-colors cursor-pointer" data-translate="blog-3-title">
                             Company Registration Process in Bangladesh
                         </h3>
-                        <p class="text-gray-600 mb-4 leading-relaxed">
+                        <p class="text-gray-600 dark:text-gray-300 mb-4 leading-relaxed" data-translate="blog-3-desc">
                             Step-by-step guide to company formation, required documents, and legal compliance for new businesses in Bangladesh.
                         </p>
-                        <a href="#" class="text-gold hover:text-navy font-semibold transition-colors">
+                        <a href="#" class="text-gold hover:text-navy dark:hover:text-gold font-semibold transition-colors" data-translate="read-more">
                             Read More <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
@@ -573,7 +674,7 @@
             </div>
             
             <div class="text-center mt-12">
-                <button class="bg-navy hover:bg-gold text-white px-8 py-4 rounded-lg font-semibold transition-colors">
+                <button class="bg-navy dark:bg-gold hover:bg-gold dark:hover:bg-navy text-white dark:text-navy px-8 py-4 rounded-lg font-semibold transition-colors" data-translate="view-all">
                     View All Articles
                 </button>
             </div>
@@ -581,11 +682,11 @@
     </section>
     
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-white">
+    <section id="contact" class="py-20 bg-white dark:bg-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16" data-aos="fade-up">
-                <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy mb-4">Contact Me</h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-navy dark:text-gold mb-4" data-translate="contact-title">Contact Me</h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto" data-translate="contact-subtitle">
                     Get in touch for a free consultation. I'm here to help you navigate your legal challenges with confidence.
                 </p>
             </div>
@@ -596,43 +697,45 @@
                     <form class="space-y-6" id="contact-form">
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-gray-700 font-semibold mb-2">Full Name *</label>
+                                <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-2" data-translate="form-name">Full Name *</label>
                                 <input type="text" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
                                        required>
                             </div>
                             <div>
-                                <label class="block text-gray-700 font-semibold mb-2">Phone Number *</label>
+                                <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-2" data-translate="form-phone">Phone Number *</label>
                                 <input type="tel" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
                                        required>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Email Address *</label>
+                            <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-2" data-translate="form-email">Email Address *</label>
                             <input type="email" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
                                    required>
                         </div>
                         <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Legal Issue Type</label>
-                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent">
-                                <option>Select Practice Area</option>
-                                <option>Criminal Law</option>
-                                <option>Family Law</option>
-                                <option>Corporate Law</option>
-                                <option>Other</option>
+                            <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-2" data-translate="form-issue">Legal Issue Type</label>
+                            <select class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent">
+                                <option data-translate="form-select">Select Practice Area</option>
+                                <option data-translate="filter-criminal">Criminal Law</option>
+                                <option data-translate="filter-family">Family Law</option>
+                                <option data-translate="filter-corporate">Corporate Law</option>
+                                <option data-translate="form-other">Other</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-gray-700 font-semibold mb-2">Message *</label>
+                            <label class="block text-gray-700 dark:text-gray-300 font-semibold mb-2" data-translate="form-message">Message *</label>
                             <textarea rows="5" 
-                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
+                                      class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-gold focus:border-transparent"
+                                      data-translate-placeholder="form-message-placeholder"
                                       placeholder="Please describe your legal issue in detail..."
                                       required></textarea>
                         </div>
                         <button type="submit" 
-                                class="w-full bg-navy hover:bg-gold text-white py-4 rounded-lg font-semibold text-lg transition-colors">
+                                class="w-full bg-navy dark:bg-gold hover:bg-gold dark:hover:bg-navy text-white dark:text-navy py-4 rounded-lg font-semibold text-lg transition-colors"
+                                data-translate="form-submit">
                             Send Message
                         </button>
                     </form>
@@ -643,51 +746,51 @@
                     <div class="space-y-8">
                         <!-- Office Address -->
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-map-marker-alt text-white"></i>
+                            <div class="w-12 h-12 bg-navy dark:bg-gold rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-white dark:text-navy"></i>
                             </div>
                             <div>
-                                <h3 class="font-serif font-bold text-navy text-xl mb-2">Office Address</h3>
-                                <p class="text-gray-600 leading-relaxed">
-                                    Chamber No. 245<br>
-                                    Supreme Court Bar Association<br>
-                                    Dhaka-1000, Bangladesh
+                                <h3 class="font-serif font-bold text-navy dark:text-gold text-xl mb-2" data-translate="office-address">Office Address</h3>
+                                <p class="text-gray-600 dark:text-gray-300 leading-relaxed" data-translate="address-details">
+                                    Chamber No. xxx <br>
+                                    Supreme Court Bar Association <br>
+                                    Dhaka-1000, Bangladesh <br>
                                 </p>
                             </div>
                         </div>
                         
                         <!-- Phone -->
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-phone text-white"></i>
+                            <div class="w-12 h-12 bg-navy dark:bg-gold rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-phone text-white dark:text-navy"></i>
                             </div>
                             <div>
-                                <h3 class="font-serif font-bold text-navy text-xl mb-2">Phone</h3>
-                                <p class="text-gray-600">+880 1712-xxxxxx</p>
-                                <p class="text-gray-600">+880 x-xxxxxx</p>
+                                <h3 class="font-serif font-bold text-navy dark:text-gold text-xl mb-2" data-translate="phone">Phone</h3>
+                                <p class="text-gray-600 dark:text-gray-300">+880 1712-xxxx</p>
+                                <p class="text-gray-600 dark:text-gray-300">+880 2-xxxxx</p>
                             </div>
                         </div>
                         
                         <!-- Email -->
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-envelope text-white"></i>
+                            <div class="w-12 h-12 bg-navy dark:bg-gold rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-envelope text-white dark:text-navy"></i>
                             </div>
                             <div>
-                                <h3 class="font-serif font-bold text-navy text-xl mb-2">Email</h3>
-                                <p class="text-gray-600">advocate.saud@lawfirm.com</p>
-                                <p class="text-gray-600">info@advocatesaud.com</p>
+                                <h3 class="font-serif font-bold text-navy dark:text-gold text-xl mb-2" data-translate="email">Email</h3>
+                                <p class="text-gray-600 dark:text-gray-300">advocate.saud@lawfirm.com</p>
+                                <p class="text-gray-600 dark:text-gray-300">info@advocatesaud.com</p>
                             </div>
                         </div>
                         
                         <!-- Office Hours -->
                         <div class="flex items-start space-x-4">
-                            <div class="w-12 h-12 bg-navy rounded-full flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-clock text-white"></i>
+                            <div class="w-12 h-12 bg-navy dark:bg-gold rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-clock text-white dark:text-navy"></i>
                             </div>
                             <div>
-                                <h3 class="font-serif font-bold text-navy text-xl mb-2">Office Hours</h3>
-                                <p class="text-gray-600">
+                                <h3 class="font-serif font-bold text-navy dark:text-gold text-xl mb-2" data-translate="office-hours">Office Hours</h3>
+                                <p class="text-gray-600 dark:text-gray-300" data-translate="hours-details">
                                     Sunday - Thursday: 9:00 AM - 6:00 PM<br>
                                     Saturday: 10:00 AM - 4:00 PM<br>
                                     Friday: Closed
@@ -707,15 +810,15 @@
     </section>
     
     <!-- Footer -->
-    <footer class="bg-navy text-white py-12">
+    <footer class="bg-navy dark:bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-4 gap-8">
                 <!-- Logo and Description -->
                 <div class="md:col-span-2">
                     <div class="text-3xl font-serif font-bold mb-4">
-                        <span class="text-gold">Advocate</span> Saud
+                        <span class="text-gold">Advocate</span> <span data-translate="name">Saud</span>
                     </div>
-                    <p class="text-gray-300 mb-6 leading-relaxed">
+                    <p class="text-gray-300 mb-6 leading-relaxed" data-translate="footer-desc">
                         Providing expert legal representation in Dhaka, Bangladesh. Committed to justice, integrity, and achieving the best outcomes for our clients across Criminal Law, Family Law, and Corporate Law.
                     </p>
                     <div class="flex space-x-4">
@@ -736,31 +839,31 @@
                 
                 <!-- Quick Links -->
                 <div>
-                    <h3 class="text-xl font-serif font-bold mb-4">Quick Links</h3>
+                    <h3 class="text-xl font-serif font-bold mb-4" data-translate="quick-links">Quick Links</h3>
                     <ul class="space-y-2">
-                        <li><a href="#home" class="text-gray-300 hover:text-gold transition-colors">Home</a></li>
-                        <li><a href="#about" class="text-gray-300 hover:text-gold transition-colors">About Me</a></li>
-                        <li><a href="#practice-areas" class="text-gray-300 hover:text-gold transition-colors">Practice Areas</a></li>
-                        <li><a href="#testimonials" class="text-gray-300 hover:text-gold transition-colors">Testimonials</a></li>
-                        <li><a href="#blog" class="text-gray-300 hover:text-gold transition-colors">Blog</a></li>
-                        <li><a href="#contact" class="text-gray-300 hover:text-gold transition-colors">Contact</a></li>
+                        <li><a href="#home" class="text-gray-300 hover:text-gold transition-colors" data-translate="nav-home">Home</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-gold transition-colors" data-translate="nav-about">About Me</a></li>
+                        <li><a href="#practice-areas" class="text-gray-300 hover:text-gold transition-colors" data-translate="nav-practice">Practice Areas</a></li>
+                        <li><a href="#testimonials" class="text-gray-300 hover:text-gold transition-colors" data-translate="nav-testimonials">Testimonials</a></li>
+                        <li><a href="#blog" class="text-gray-300 hover:text-gold transition-colors" data-translate="nav-blog">Blog</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-gold transition-colors" data-translate="nav-contact">Contact</a></li>
                     </ul>
                 </div>
                 
                 <!-- Legal -->
                 <div>
-                    <h3 class="text-xl font-serif font-bold mb-4">Legal</h3>
+                    <h3 class="text-xl font-serif font-bold mb-4" data-translate="legal">Legal</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-300 hover:text-gold transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-gold transition-colors">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-gold transition-colors">Disclaimer</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-gold transition-colors">Cookie Policy</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-gold transition-colors" data-translate="privacy">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-gold transition-colors" data-translate="terms">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-gold transition-colors" data-translate="disclaimer">Disclaimer</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-gold transition-colors" data-translate="cookies">Cookie Policy</a></li>
                     </ul>
                 </div>
             </div>
             
             <div class="border-t border-gray-700 mt-8 pt-8 text-center">
-                <p class="text-gray-300">
+                <p class="text-gray-300" data-translate="copyright">
                     &copy; 2025 Advocate Saud. All rights reserved. | Attorney Advertising | Prior results do not guarantee a similar outcome.
                 </p>
             </div>
@@ -769,7 +872,7 @@
     
     <!-- WhatsApp Chat Widget -->
     <div class="fixed bottom-6 right-6 z-50">
-        <a href="https://wa.me/8801619663036" 
+        <a href="http://wa.me/8801619663036" 
            target="_blank" 
            class="bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-lg transition-all transform hover:scale-110">
             <i class="fab fa-whatsapp text-2xl"></i>
@@ -778,18 +881,349 @@
     
     <!-- Back to Top Button -->
     <button id="back-to-top" 
-            class="fixed bottom-6 left-6 bg-navy hover:bg-gold text-white p-3 rounded-full shadow-lg transition-all transform translate-y-20 opacity-0 z-50">
+            class="fixed bottom-6 left-6 bg-navy dark:bg-gold hover:bg-gold dark:hover:bg-navy text-white dark:text-navy p-3 rounded-full shadow-lg transition-all transform translate-y-20 opacity-0 z-50">
         <i class="fas fa-chevron-up"></i>
     </button>
     
     <!-- Scripts -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // Initialize AOS
-        AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
+        // Language translations
+        const translations = {
+            en: {
+                'advocate': 'Advocate',
+                'name': 'Saud',
+                'nav-home': 'Home',
+                'nav-about': 'About',
+                'nav-practice': 'Practice Areas',
+                'nav-testimonials': 'Testimonials',
+                'nav-blog': 'Blog',
+                'nav-contact': 'Contact',
+                'hero-title': 'Justice Delayed is <span class="gradient-text">Justice Denied</span>',
+                'hero-subtitle': 'Premier Legal Services in Dhaka, Bangladesh',
+                'hero-cta1': 'Get Free Consultation',
+                'hero-cta2': 'View Practice Areas',
+                'about-title': 'About Advocate Saud',
+                'about-subtitle': 'With over a decade of experience in Bangladesh\'s legal system, I am committed to providing exceptional legal representation and achieving justice for my clients.',
+                'about-heading': 'Experienced Legal Advocate',
+                'about-p1': 'I am a seasoned advocate practicing in the Supreme Court of Bangladesh and various subordinate courts in Dhaka. My practice focuses on delivering comprehensive legal solutions with integrity, professionalism, and unwavering dedication to justice.',
+                'about-p2': 'Having handled over 500+ cases successfully, I bring extensive experience in Criminal Law, Family Law, and Corporate Law. My approach combines deep legal knowledge with strategic thinking to achieve the best possible outcomes for my clients.',
+                'stat-cases': 'Cases Won',
+                'stat-experience': 'Years Experience',
+                'stat-success': 'Success Rate',
+                'timeline-title': 'Education & Experience',
+                'timeline-1-title': 'LL.B (Hons)',
+                'timeline-1-place': 'University of Dhaka',
+                'timeline-2-title': 'Bar Council Enrollment',
+                'timeline-2-place': 'Bangladesh Bar Council',
+                'timeline-3-title': 'Senior Associate',
+                'timeline-3-place': 'Rahman & Associates',
+                'timeline-4-title': 'Independent Practice',
+                'timeline-4-place': 'Advocate Saud Chambers',
+                'present': 'Present',
+                'practice-title': 'Practice Areas',
+                'practice-subtitle': 'Comprehensive legal services across multiple practice areas with proven expertise and successful track record.',
+                'criminal-title': 'Criminal Law',
+                'criminal-desc': 'Expert defense representation in all criminal matters including murder, theft, fraud, and white-collar crimes with a proven track record of successful acquittals.',
+                'criminal-1': 'Murder & Homicide Cases',
+                'criminal-2': 'Fraud & Financial Crimes',
+                'criminal-3': 'Drug Offenses',
+                'criminal-4': 'Bail Applications',
+                'family-title': 'Family Law',
+                'family-desc': 'Compassionate and skilled representation in family matters including divorce, child custody, maintenance, and inheritance disputes with focus on amicable resolutions.',
+                'family-1': 'Divorce Proceedings',
+                'family-2': 'Child Custody',
+                'family-3': 'Maintenance Claims',
+                'family-4': 'Inheritance Disputes',
+                'corporate-title': 'Corporate Law',
+                'corporate-desc': 'Comprehensive corporate legal services including company formation, contracts, compliance, mergers, and business dispute resolution for growing enterprises.',
+                'corporate-1': 'Company Formation',
+                'corporate-2': 'Contract Drafting',
+                'corporate-3': 'Compliance Advisory',
+                'corporate-4': 'Business Disputes',
+                'learn-more': 'Learn More',
+                'testimonials-title': 'Client Testimonials',
+                'testimonials-subtitle': 'What my clients say about their experience working with me.',
+                'testimonial-1': '"Advocate Saud handled my criminal case with exceptional skill and dedication. His expertise and professional approach gave me confidence throughout the entire process. I\'m grateful for the positive outcome."',
+                'client-1-name': 'Mohammad Rahman',
+                'client-1-title': 'Business Owner',
+                'testimonial-2': '"During my difficult divorce case, Advocate Saud provided not just legal expertise but also emotional support. His compassionate approach and strategic thinking helped me achieve a fair settlement."',
+                'client-2-name': 'Fatima Ahmed',
+                'client-2-title': 'Teacher',
+                'testimonial-3': '"Excellent corporate legal services for our company formation and ongoing compliance. Advocate Saud\'s attention to detail and business acumen have been invaluable to our growth."',
+                'client-3-name': 'Shahid Khan',
+                'client-3-title': 'CEO, Tech Startup',
+                'testimonial-4': '"Professional, knowledgeable, and reliable. Advocate Saud successfully resolved our property dispute with impressive legal strategy and negotiation skills. Highly recommended!"',
+                'client-4-name': 'Nasir Hossain',
+                'client-4-title': 'Real Estate Developer',
+                'blog-title': 'Legal Insights & Blog',
+                'blog-subtitle': 'Stay informed with latest legal developments, insights, and practical advice from experienced legal practice.',
+                'search-placeholder': 'Search articles...',
+                'filter-all': 'All',
+                'filter-criminal': 'Criminal Law',
+                'filter-family': 'Family Law',
+                'filter-corporate': 'Corporate Law',
+                'blog-1-title': 'Understanding Bail Procedures in Bangladesh',
+                'blog-1-desc': 'A comprehensive guide to bail procedures, requirements, and your rights when facing criminal charges in Bangladesh courts.',
+                'blog-2-title': 'Child Custody Rights in Bangladesh | সন্তানের অভিভাবকত্বের অধিকার',
+                'blog-2-desc': 'Essential information about child custody laws, parental rights, and court procedures in Bangladesh family law.',
+                'blog-3-title': 'Company Registration Process in Bangladesh',
+                'blog-3-desc': 'Step-by-step guide to company formation, required documents, and legal compliance for new businesses in Bangladesh.',
+                'read-more': 'Read More',
+                'view-all': 'View All Articles',
+                'contact-title': 'Contact Me',
+                'contact-subtitle': 'Get in touch for a free consultation. I\'m here to help you navigate your legal challenges with confidence.',
+                'form-name': 'Full Name *',
+                'form-phone': 'Phone Number *',
+                'form-email': 'Email Address *',
+                'form-issue': 'Legal Issue Type',
+                'form-select': 'Select Practice Area',
+                'form-other': 'Other',
+                'form-message': 'Message *',
+                'form-message-placeholder': 'Please describe your legal issue in detail...',
+                'form-submit': 'Send Message',
+                'office-address': 'Office Address',
+                'address-details': 'Chamber No. xxx<br>Supreme Court Bar Association<br>Dhaka-1000, Bangladesh',
+                'phone': 'Phone',
+                'email': 'Email',
+                'office-hours': 'Office Hours',
+                'hours-details': 'Sunday - Thursday: 9:00 AM - 6:00 PM<br>Saturday: 10:00 AM - 4:00 PM<br>Friday: Closed',
+                'footer-desc': 'Providing expert legal representation in Dhaka, Bangladesh. Committed to justice, integrity, and achieving the best outcomes for our clients across Criminal Law, Family Law, and Corporate Law.',
+                'quick-links': 'Quick Links',
+                'legal': 'Legal',
+                'privacy': 'Privacy Policy',
+                'terms': 'Terms of Service',
+                'disclaimer': 'Disclaimer',
+                'cookies': 'Cookie Policy',
+                'copyright': '&copy; 2024 Advocate Saud. All rights reserved. | Attorney Advertising | Prior results do not guarantee a similar outcome.'
+            },
+            bn: {
+                'advocate': 'অ্যাডভোকেট',
+                'name': 'সাউদ',
+                'nav-home': 'হোম',
+                'nav-about': 'আমার সম্পর্কে',
+                'nav-practice': 'আইনি সেবা',
+                'nav-testimonials': 'মক্কেলদের মতামত',
+                'nav-blog': 'ব্লগ',
+                'nav-contact': 'যোগাযোগ',
+                'hero-title': 'বিলম্বিত ন্যায়বিচার <span class="gradient-text">অস্বীকৃত ন্যায়বিচার</span>',
+                'hero-subtitle': 'ঢাকা, বাংলাদেশে প্রিমিয়াম আইনি সেবা',
+                'hero-cta1': 'বিনামূল্যে পরামর্শ নিন',
+                'hero-cta2': 'আইনি সেবা দেখুন',
+                'about-title': 'অ্যাডভোকেট সাউদ সম্পর্কে',
+                'about-subtitle': 'বাংলাদেশের আইনি ব্যবস্থায় এক দশকেরও বেশি অভিজ্ঞতার সাথে, আমি ব্যতিক্রমী আইনি প্রতিনিধিত্ব প্রদান এবং আমার মক্কেলদের জন্য ন্যায়বিচার অর্জনে প্রতিশ্রুতিবদ্ধ।',
+                'about-heading': 'অভিজ্ঞ আইনি অ্যাডভোকেট',
+                'about-p1': 'আমি বাংলাদেশের সুপ্রিম কোর্ট এবং ঢাকার বিভিন্ন অধস্তন আদালতে অনুশীলনকারী একজন অভিজ্ঞ অ্যাডভোকেট। আমার অনুশীলন সততা, পেশাদারিত্ব এবং ন্যায়বিচারের প্রতি অটুট নিবেদনের সাথে ব্যাপক আইনি সমাধান প্রদানের উপর ফোকাস করে।',
+                'about-p2': '৫০০+ এর বেশি মামলা সফলভাবে পরিচালনা করে, আমি ফৌজদারি আইন, পারিবারিক আইন এবং কর্পোরেট আইনে ব্যাপক অভিজ্ঞতা নিয়ে এসেছি। আমার পদ্ধতি আমার মক্কেলদের জন্য সর্বোত্তম সম্ভাব্য ফলাফল অর্জনের জন্য গভীর আইনি জ্ঞান এবং কৌশলগত চিন্তাভাবনাকে একত্রিত করে।',
+                'stat-cases': 'জিতেছি মামলা',
+                'stat-experience': 'বছরের অভিজ্ঞতা',
+                'stat-success': 'সফলতার হার',
+                'timeline-title': 'শিক্ষা ও অভিজ্ঞতা',
+                'timeline-1-title': 'এলএলবি (অনার্স)',
+                'timeline-1-place': 'ঢাকা বিশ্ববিদ্যালয়',
+                'timeline-2-title': 'বার কাউন্সিল এনরোলমেন্ট',
+                'timeline-2-place': 'বাংলাদেশ বার কাউন্সিল',
+                'timeline-3-title': 'সিনিয়র অ্যাসোসিয়েট',
+                'timeline-3-place': 'রহমান অ্যান্ড অ্যাসোসিয়েটস',
+                'timeline-4-title': 'স্বতন্ত্র অনুশীলন',
+                'timeline-4-place': 'অ্যাডভোকেট সাউদ চেম্বার্স',
+                'present': 'বর্তমান',
+                'practice-title': 'আইনি সেবার ক্ষেত্র',
+                'practice-subtitle': 'প্রমাণিত দক্ষতা এবং সফল ট্র্যাক রেকর্ড সহ একাধিক অনুশীলন ক্ষেত্রে ব্যাপক আইনি সেবা।',
+                'criminal-title': 'ফৌজদারি আইন',
+                'criminal-desc': 'সফল খালাসের প্রমাণিত ট্র্যাক রেকর্ড সহ হত্যা, চুরি, জালিয়াতি এবং হোয়াইট-কলার অপরাধ সহ সমস্ত ফৌজদারি বিষয়ে বিশেষজ্ঞ প্রতিরক্ষা প্রতিনিধিত্ব।',
+                'criminal-1': 'হত্যা ও খুনের মামলা',
+                'criminal-2': 'জালিয়াতি ও আর্থিক অপরাধ',
+                'criminal-3': 'মাদকের অপরাধ',
+                'criminal-4': 'জামিনের আবেদন',
+                'family-title': 'পারিবারিক আইন',
+                'family-desc': 'সৌহার্দ্যপূর্ণ সমাধানের উপর ফোকাস করে তালাক, সন্তানের হেফাজত, ভরণপোষণ এবং উত্তরাধিকার বিরোধ সহ পারিবারিক বিষয়ে করুণাময় এবং দক্ষ প্রতিনিধিত্ব।',
+                'family-1': 'তালাকের কার্যক্রম',
+                'family-2': 'সন্তানের হেফাজত',
+                'family-3': 'ভরণপোষণের দাবি',
+                'family-4': 'উত্তরাধিকার বিরোধ',
+                'corporate-title': 'কর্পোরেট আইন',
+                'corporate-desc': 'ক্রমবর্ধমান উদ্যোগের জন্য কোম্পানি গঠন, চুক্তি, সম্মতি, একীকরণ এবং ব্যবসায়িক বিরোধ নিষ্পত্তি সহ ব্যাপক কর্পোরেট আইনি সেবা।',
+                'corporate-1': 'কোম্পানি গঠন',
+                'corporate-2': 'চুক্তি প্রণয়ন',
+                'corporate-3': 'সম্মতি পরামর্শ',
+                'corporate-4': 'ব্যবসায়িক বিরোধ',
+                'learn-more': 'আরও জানুন',
+                'testimonials-title': 'মক্কেলদের প্রশংসাপত্র',
+                'testimonials-subtitle': 'আমার সাথে কাজ করার অভিজ্ঞতা সম্পর্কে আমার মক্কেলরা কী বলেন।',
+                'testimonial-1': '"অ্যাডভোকেট সাউদ ব্যতিক্রমী দক্ষতা এবং নিবেদনের সাথে আমার ফৌজদারি মামলা পরিচালনা করেছেন। তার দক্ষতা এবং পেশাদার পদ্ধতি পুরো প্রক্রিয়া জুড়ে আমাকে আত্মবিশ্বাস দিয়েছে। আমি ইতিবাচক ফলাফলের জন্য কৃতজ্ঞ।"',
+                'client-1-name': 'মোহাম্মদ রহমান',
+                'client-1-title': 'ব্যবসায়ী',
+                'testimonial-2': '"আমার কঠিন তালাকের মামলার সময়, অ্যাডভোকেট সাউদ শুধু আইনি দক্ষতাই নয়, আবেগিক সহায়তাও প্রদান করেছেন। তার সহানুভূতিশীল পদ্ধতি এবং কৌশলগত চিন্তাভাবনা আমাকে একটি ন্যায্য নিষ্পত্তি অর্জনে সহায়তা করেছে।"',
+                'client-2-name': 'ফাতিমা আহমেদ',
+                'client-2-title': 'শিক্ষিকা',
+                'testimonial-3': '"আমাদের কোম্পানি গঠন এবং চলমান সম্মতির জন্য চমৎকার কর্পোরেট আইনি সেবা। অ্যাডভোকেট সাউদের বিস্তারিত মনোযোগ এবং ব্যবসায়িক বুদ্ধিমত্তা আমাদের বৃদ্ধির জন্য অমূল্য হয়েছে।"',
+                'client-3-name': 'শহীদ খান',
+                'client-3-title': 'সিইও, টেক স্টার্টআপ',
+                'testimonial-4': '"পেশাদার, জ্ঞানী এবং নির্ভরযোগ্য। অ্যাডভোকেট সাউদ চমৎকার আইনি কৌশল এবং আলোচনার দক্ষতার সাথে আমাদের সম্পত্তি বিরোধ সফলভাবে সমাধান করেছেন। অত্যন্ত সুপারিশকৃত!"',
+                'client-4-name': 'নাসির হোসেন',
+                'client-4-title': 'রিয়েল এস্টেট ডেভেলপার',
+                'blog-title': 'আইনি অন্তর্দৃষ্টি ও ব্লগ',
+                'blog-subtitle': 'অভিজ্ঞ আইনি অনুশীলন থেকে সর্বশেষ আইনি উন্নয়ন, অন্তর্দৃষ্টি এবং ব্যবহারিক পরামর্শ সহ আপডেট থাকুন।',
+                'search-placeholder': 'নিবন্ধ খুঁজুন...',
+                'filter-all': 'সব',
+                'filter-criminal': 'ফৌজদারি আইন',
+                'filter-family': 'পারিবারিক আইন',
+                'filter-corporate': 'কর্পোরেট আইন',
+                'blog-1-title': 'বাংলাদেশে জামিন প্রক্রিয়া বোঝা',
+                'blog-1-desc': 'বাংলাদেশের আদালতে ফৌজদারি অভিযোগের মুখোমুখি হওয়ার সময় জামিন প্রক্রিয়া, প্রয়োজনীয়তা এবং আপনার অধিকারের একটি বিস্তৃত গাইড।',
+                'blog-2-title': 'বাংলাদেশে সন্তানের হেফাজতের অধিকার | Child Custody Rights in Bangladesh',
+                'blog-2-desc': 'বাংলাদেশের পারিবারিক আইনে সন্তানের হেফাজত আইন, পিতামাতার অধিকার এবং আদালতের প্রক্রিয়া সম্পর্কে প্রয়োজনীয় তথ্য।',
+                'blog-3-title': 'বাংলাদেশে কোম্পানি নিবন্ধন প্রক্রিয়া',
+                'blog-3-desc': 'বাংলাদেশে নতুন ব্যবসার জন্য কোম্পানি গঠন, প্রয়োজনীয় নথি এবং আইনি সম্মতির ধাপে ধাপে গাইড।',
+                'read-more': 'আরও পড়ুন',
+                'view-all': 'সব নিবন্ধ দেখুন',
+                'contact-title': 'আমার সাথে যোগাযোগ করুন',
+                'contact-subtitle': 'বিনামূল্যে পরামর্শের জন্য যোগাযোগ করুন। আমি আপনাকে আত্মবিশ্বাসের সাথে আপনার আইনি চ্যালেঞ্জগুলি নেভিগেট করতে সহায়তা করতে এখানে আছি।',
+                'form-name': 'পূর্ণ নাম *',
+                'form-phone': 'ফোন নম্বর *',
+                'form-email': 'ইমেইল ঠিকানা *',
+                'form-issue': 'আইনি সমস্যার ধরন',
+                'form-select': 'অনুশীলন ক্ষেত্র নির্বাচন করুন',
+                'form-other': 'অন্যান্য',
+                'form-message': 'বার্তা *',
+                'form-message-placeholder': 'অনুগ্রহ করে আপনার আইনি সমস্যা বিস্তারিত বর্ণনা করুন...',
+                'form-submit': 'বার্তা পাঠান',
+                'office-address': 'অফিসের ঠিকানা',
+                'address-details': 'চেম্বার নং ২৪৫<br>সুপ্রিম কোর্ট বার অ্যাসোসিয়েশন<br>ঢাকা-১০০০, বাংলাদেশ',
+                'phone': 'ফোন',
+                'email': 'ইমেইল',
+                'office-hours': 'অফিস সময়',
+                'hours-details': 'রবিবার - বৃহস্পতিবার: সকাল ৯:০০ - সন্ধ্যা ৬:০০<br>শনিবার: সকাল ১০:০০ - বিকাল ৪:০০<br>শুক্রবার: বন্ধ',
+                'footer-desc': 'ঢাকা, বাংলাদেশে বিশেষজ্ঞ আইনি প্রতিনিধিত্ব প্রদান। ন্যায়বিচার, সততা এবং ফৌজদারি আইন, পারিবারিক আইন এবং কর্পোরেট আইন জুড়ে আমাদের মক্কেলদের জন্য সর্বোত্তম ফলাফল অর্জনের জন্য প্রতিশ্রুতিবদ্ধ।',
+                'quick-links': 'দ্রুত লিঙ্ক',
+                'legal': 'আইনি',
+                'privacy': 'গোপনীয়তা নীতি',
+                'terms': 'সেবার শর্তাবলী',
+                'disclaimer': 'দাবিত্যাগ',
+                'cookies': 'কুকি নীতি',
+                'copyright': '&copy; ২০২৪ অ্যাডভোকেট সাউদ। সর্বস্বত্ব সংরক্ষিত। | অ্যাটর্নি বিজ্ঞাপন | পূর্ববর্তী ফলাফল অনুরূপ ফলাফলের গ্যারান্টি দেয় না।'
+            }
+        };
+
+        // Current language
+        let currentLang = 'en';
+
+        // Translation function
+        function translatePage(lang) {
+            currentLang = lang;
+            
+            // Update body font class
+            document.body.className = document.body.className.replace(/lang-\w+/, `lang-${lang}`);
+            document.body.classList.add(`lang-${lang}`);
+            
+            // Translate all elements with data-translate attribute
+            document.querySelectorAll('[data-translate]').forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+            
+            // Translate placeholders
+            document.querySelectorAll('[data-translate-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-translate-placeholder');
+                if (translations[lang] && translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+            
+            // Update language buttons
+            updateLanguageButtons(lang);
+            
+            // Save preference
+            localStorage.setItem('preferred-language', lang);
+        }
+        
+        // Update language button states
+        function updateLanguageButtons(lang) {
+            const enButtons = document.querySelectorAll('#lang-en, #mobile-lang-en');
+            const bnButtons = document.querySelectorAll('#lang-bn, #mobile-lang-bn');
+            
+            if (lang === 'en') {
+                enButtons.forEach(btn => {
+                    btn.classList.add('bg-gold', 'text-navy');
+                    btn.classList.remove('text-white');
+                });
+                bnButtons.forEach(btn => {
+                    btn.classList.remove('bg-gold', 'text-navy');
+                    btn.classList.add('text-white');
+                });
+            } else {
+                bnButtons.forEach(btn => {
+                    btn.classList.add('bg-gold', 'text-navy');
+                    btn.classList.remove('text-white');
+                });
+                enButtons.forEach(btn => {
+                    btn.classList.remove('bg-gold', 'text-navy');
+                    btn.classList.add('text-white');
+                });
+            }
+        }
+        
+        // Dark mode functionality
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            
+            if (isDark) {
+                html.classList.remove('dark');
+                localStorage.setItem('dark-mode', 'false');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('dark-mode', 'true');
+            }
+            
+            // Update toggle states
+            updateDarkModeToggles(!isDark);
+        }
+        
+        // Update dark mode toggle states
+        function updateDarkModeToggles(isDark) {
+            const toggles = document.querySelectorAll('#dark-mode-toggle, #mobile-dark-mode-toggle');
+            toggles.forEach(toggle => {
+                toggle.checked = isDark;
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize dark mode
+            const savedDarkMode = localStorage.getItem('dark-mode');
+            if (savedDarkMode === 'true') {
+                document.documentElement.classList.add('dark');
+                updateDarkModeToggles(true);
+            }
+            
+            // Initialize language
+            const savedLang = localStorage.getItem('preferred-language') || 'en';
+            translatePage(savedLang);
+            
+            // Initialize AOS
+            AOS.init({
+                duration: 1000,
+                once: true,
+                offset: 100
+            });
+        });
+        
+        // Event listeners for language switching
+        document.querySelectorAll('#lang-en, #mobile-lang-en').forEach(btn => {
+            btn.addEventListener('click', () => translatePage('en'));
+        });
+        
+        document.querySelectorAll('#lang-bn, #mobile-lang-bn').forEach(btn => {
+            btn.addEventListener('click', () => translatePage('bn'));
+        });
+        
+        // Event listeners for dark mode
+        document.querySelectorAll('#dark-mode-toggle, #mobile-dark-mode-toggle').forEach(toggle => {
+            toggle.addEventListener('change', toggleDarkMode);
         });
         
         // Navbar scroll effect
@@ -798,10 +1232,10 @@
             const backToTop = document.getElementById('back-to-top');
             
             if (window.scrollY > 100) {
-                navbar.classList.add('bg-navy', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg');
+                navbar.classList.add('bg-navy', 'dark:bg-gray-800', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg');
                 backToTop.classList.remove('translate-y-20', 'opacity-0');
             } else {
-                navbar.classList.remove('bg-navy', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg');
+                navbar.classList.remove('bg-navy', 'dark:bg-gray-800', 'bg-opacity-95', 'backdrop-blur-sm', 'shadow-lg');
                 backToTop.classList.add('translate-y-20', 'opacity-0');
             }
         });
@@ -813,23 +1247,6 @@
         mobileMenuButton.addEventListener('click', function() {
             mobileMenu.classList.toggle('hidden');
         });
-        
-        // Language toggle
-        const langEn = document.getElementById('lang-en');
-        const langBn = document.getElementById('lang-bn');
-        
-        langEn.addEventListener('click', function() {
-            langEn.classList.add('bg-gold', 'text-navy');
-            langBn.classList.remove('bg-gold', 'text-navy');
-        });
-        
-        langBn.addEventListener('click', function() {
-            langBn.classList.add('bg-gold', 'text-navy');
-            langEn.classList.remove('bg-gold', 'text-navy');
-        });
-        
-        // Set default language
-        langEn.classList.add('bg-gold', 'text-navy');
         
         // Testimonial carousel
         let currentTestimonial = 0;
@@ -910,33 +1327,17 @@
             
             if (isValid) {
                 // Here you would typically send the form data to your server
-                alert('Thank you for your message! I will get back to you soon.');
+                const successMessage = currentLang === 'bn' 
+                    ? 'আপনার বার্তার জন্য ধন্যবাদ! আমি শীঘ্রই আপনার কাছে ফিরে আসব।'
+                    : 'Thank you for your message! I will get back to you soon.';
+                alert(successMessage);
                 this.reset();
             } else {
-                alert('Please fill in all required fields.');
+                const errorMessage = currentLang === 'bn'
+                    ? 'অনুগ্রহ করে সমস্ত প্রয়োজনীয় ক্ষেত্র পূরণ করুন।'
+                    : 'Please fill in all required fields.';
+                alert(errorMessage);
             }
-        });
-        
-        // Add loading states and interactions
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add fade-in effect to elements as they come into view
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
-            const observer = new IntersectionObserver(function(entries) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-fadeIn');
-                    }
-                });
-            }, observerOptions);
-            
-            // Observe all sections
-            document.querySelectorAll('section').forEach(section => {
-                observer.observe(section);
-            });
         });
         
     </script>
