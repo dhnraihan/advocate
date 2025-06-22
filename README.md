@@ -4,7 +4,7 @@ A modern, elegant, and fully responsive law website built for **Advocate Saud**,
 
 ![Website Preview](https://img.shields.io/badge/Status-Ready%20for%20Production-brightgreen)
 ![Responsive](https://img.shields.io/badge/Responsive-Yes-blue)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+<!-- ![License](https://img.shields.io/badge/License-MIT-yellow) -->
 
 ## 🌟 Features
 
@@ -309,10 +309,10 @@ For technical support or customization requests:
 - **Email**: support@yourwebsite.com
 - **Documentation**: Check this README first
 - **Issues**: Create a GitHub issue for bug reports
-
+<!-- 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details. -->
 
 ## 🙏 Credits
 
